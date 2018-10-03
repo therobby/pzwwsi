@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">PZWWSI</string>
+    <string name="app_name">WWSI Companion</string>
+    <string name="welcome_message">Log in using WWSI account credentials.</string>
+    <string name="login">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WWSI Companion</string>
+    <string name="welcome_message">Zaloguj się uzywając konta uczelnianego WWSI.</string>
+    <string name="login">Nazwa użytkownika</string>
+    <string name="password">Hasło</string>
+    <string name="sign_in">Zaloguj</string>
+</resources>
