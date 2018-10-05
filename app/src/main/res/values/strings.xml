@@ -4,4 +4,5 @@
     <string name="login">Username</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign In</string>
+    <string name="login_logo">WWSI logo</string>
 </resources>
