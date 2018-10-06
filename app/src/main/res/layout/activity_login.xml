@@ -69,8 +69,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/login"
-            android:inputType="textPersonName"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/editText5"
