@@ -8,8 +8,11 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="login_failed">Login Failed!</string>
+    <string name="login_empty">Login and Password fields shouldn\'t be empty!</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="main_back_pressed">Press again to quit</string>
 </resources>

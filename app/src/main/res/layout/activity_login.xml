@@ -15,7 +15,7 @@
         android:contentDescription="@string/login_logo"
         android:scaleX="2.5"
         android:scaleY="2.5"
-        app:layout_constraintBottom_toTopOf="@+id/space"
+        app:layout_constraintBottom_toTopOf="@+id/message_space"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,7 +23,7 @@
         app:srcCompat="@mipmap/logo_foreground" />
 
     <Space
-        android:id="@+id/space"
+        android:id="@+id/message_space"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -43,18 +43,19 @@
         android:layout_marginEnd="8dp"
         android:text="@string/welcome_message"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/login_ll3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/space" />
+        app:layout_constraintTop_toBottomOf="@+id/message_space" />
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/login_ll3"
         android:layout_width="wrap_content"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/login_edit_text"
             android:ems="10"
             android:hint="@string/login"
             android:importantForAutofill="no"
@@ -77,15 +79,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/login_edit_text"
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_weight="0" />
 
         <Button
             android:id="@+id/zaloguj"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/login_button"
             android:text="@string/sign_in"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="455dp" />

@@ -1,23 +1,26 @@
 package com.tuxdev.pzwwsi
 
+import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.Menu
+import android.view.LayoutInflater
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import org.jetbrains.anko.Orientation
+import org.jetbrains.anko.contentView
 import kotlin.concurrent.thread
+import android.content.Intent
+import android.util.Log
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private var backPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,24 +36,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         thread {
             Main.studentWebsiteConnection.getKomunikaty().forEach {
-                val linearLayout = LinearLayout(this)
-                linearLayout.orientation = LinearLayout.VERTICAL
-
-                val title = TextView(this)
-                val date = TextView(this)
-                val data = TextView(this)
-
-                title.text = it.getElementsByClass("news_title").text()
-                date.text = it.getElementsByClass("news_podpis").text()
-                data.text = it.getElementsByClass("news_content").text()
-
-                Log.e("Komunikaty", "${title.text} ${date.text} ${data.text}")
+                val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val view = inflater.inflate(R.layout.template_message_container, null)  // noot noot
 
                 runOnUiThread {
-                    linearLayout.addView(title)
-                    linearLayout.addView(date)
-                    linearLayout.addView(data)
-                    main_scroll_layout.addView(linearLayout)
+                    view.findViewById<TextView>(R.id.message_title).text =
+                            it.getElementsByClass("news_title").text()
+
+                    view.findViewById<TextView>(R.id.message_date).text =
+                            it.getElementsByClass("news_podpis").text()
+
+                    view.findViewById<TextView>(R.id.message_data).text =
+                            it.getElementsByClass("news_content").text()
+
+                    main_scroll_layout.addView(view)
                 }
             }
         }
@@ -60,7 +59,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if (!backPressed) {
+                Snackbar.make(currentFocus, resources.getString(R.string.main_back_pressed), Snackbar.LENGTH_LONG)
+                        .setDuration(2000)
+                        .show()
+
+                backPressed = true
+                thread {
+                    Thread.sleep(2000)
+                    backPressed = !backPressed
+                }
+            } else {
+                val startMain = Intent(Intent.ACTION_MAIN)
+                startMain.addCategory(Intent.CATEGORY_HOME)
+                startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(startMain)
+            }
         }
     }
 

@@ -1,5 +1,4 @@
 package com.tuxdev.pzwwsi
-import android.sax.Element
 import android.util.Log
 import org.jsoup.Connection
 import org.jsoup.Jsoup
@@ -25,6 +24,8 @@ class Networking {
                 .method(Connection.Method.POST)
                 .userAgent(HttpConnection.DEFAULT_UA)
                 .execute()
+
+        Log.e("Dupa",loginResult.body().toString())
 
         val page = Jsoup.connect(url)
                 .cookies(loginCookies)

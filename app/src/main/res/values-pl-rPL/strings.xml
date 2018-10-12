@@ -6,4 +6,14 @@
     <string name="password">Hasło</string>
     <string name="sign_in">Zaloguj</string>
     <string name="login_logo">WWSI logo</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Otfusz menu</string>
+    <string name="navigation_drawer_close">zamkn menu</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">Android Studio</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_failed">Logowanie nie powiodło się!</string>
+    <string name="login_empty">Pole z nazwą urzytkownika i z hasłem nie moze być puste!</string>
+    <string name="main_back_pressed">Naciśnij ponownie aby wyjść</string>
 </resources>
