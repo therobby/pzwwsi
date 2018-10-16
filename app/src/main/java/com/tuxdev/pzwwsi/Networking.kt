@@ -33,6 +33,7 @@ class Networking {
                 .get()
         val userTag = page.getElementById("loginInfo").text()
         Log.e("Login",userTag)
+
         return userTag.contains("Zalogowany")
     }
 
@@ -50,5 +51,10 @@ class Networking {
                 .userAgent(HttpConnection.DEFAULT_UA)
                 .get()
          return page.getElementsByClass("news_box")
+    }
+
+    fun setService(service : MessagesCheckService){
+        service.setCookie(loginCookies)
+        service.startLooper()
     }
 }
