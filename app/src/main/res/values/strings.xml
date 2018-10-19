@@ -15,4 +15,7 @@
     <string name="login_empty">Login and Password fields shouldn\'t be empty!</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="main_back_pressed">Press again to quit</string>
+    <string name="nav_info">Messages</string>
+    <string name="nav_plan">Schedule</string>
+    <string name="nav_logout">Logout</string>
 </resources>

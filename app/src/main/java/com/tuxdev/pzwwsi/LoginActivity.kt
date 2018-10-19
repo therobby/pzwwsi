@@ -1,44 +1,19 @@
 package com.tuxdev.pzwwsi
 
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.IBinder
 import android.support.design.widget.Snackbar
 import android.util.Log
 import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.colorAttr
-import org.jetbrains.anko.runOnUiThread
 import kotlin.concurrent.thread
 
 class LoginActivity : AppCompatActivity() {
 
-    private var mService : MessagesCheckService? = null
-    private var mBound = false
-    private val mConnect = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as MessagesCheckService.ThisBinder
-            mService = binder.getService()
-            mBound = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            mBound = false
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-        Intent(this, MessagesCheckService::class.java).also { intent ->
-            bindService(intent, mConnect, Context.BIND_AUTO_CREATE)
-        }
 
         zaloguj.setOnClickListener {
             if (login_field.text.isBlank() || password_field.text.isBlank()){
@@ -60,10 +35,8 @@ class LoginActivity : AppCompatActivity() {
                     if(Main.studentWebsiteConnection.login(username, password)) {
                         val user = Main.studentWebsiteConnection.getStudentName()
                         Log.e("Login",user)
-                        if(mService != null)
-                            Main.studentWebsiteConnection.setService(mService!!)
-                        else
-                            Log.e("Login","Service is null!")
+
+                        Main.studentWebsiteConnection.setService(this)
 
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
@@ -87,5 +60,13 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        val startMain = Intent(Intent.ACTION_MAIN)
+        startMain.addCategory(Intent.CATEGORY_HOME)
+        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMain)
     }
 }

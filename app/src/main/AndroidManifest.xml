@@ -25,7 +25,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <service android:name=".MessagesCheckService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>

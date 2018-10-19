@@ -1,26 +1,24 @@
 package com.tuxdev.pzwwsi
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
 import android.view.MenuItem
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import org.jetbrains.anko.contentView
 import kotlin.concurrent.thread
 import android.content.Intent
 import android.util.Log
+import org.jetbrains.anko.colorAttr
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var backPressed = false
+    private val fragmentManager = supportFragmentManager
+    private val fragmentTransaction = fragmentManager.beginTransaction()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,26 +31,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+        nav_view.setCheckedItem(R.id.nav_info)
 
-        thread {
-            Main.studentWebsiteConnection.getKomunikaty().forEach {
-                val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val view = inflater.inflate(R.layout.template_message_container, null)  // noot noot
-
-                runOnUiThread {
-                    view.findViewById<TextView>(R.id.message_title).text =
-                            it.getElementsByClass("news_title").text()
-
-                    view.findViewById<TextView>(R.id.message_date).text =
-                            it.getElementsByClass("news_podpis").text()
-
-                    view.findViewById<TextView>(R.id.message_data).text =
-                            it.getElementsByClass("news_content").text()
-
-                    main_scroll_layout.addView(view)
-                }
-            }
-        }
+        val fragment = InfoMessages()
+        fragmentTransaction.add(R.id.main_act, fragment)
+        fragmentTransaction.commit()
     }
 
     override fun onBackPressed() {
@@ -81,23 +64,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+            R.id.nav_info -> {
+                try {
+                    val fragment = InfoMessages()
+                    fragmentTransaction.add(R.id.main_act, fragment)
+                    fragmentTransaction.commit()
+                }catch (e : Exception){
+                    Log.e("Navigation_Change",e.message)
+                }
             }
-            R.id.nav_gallery -> {
-
+            R.id.nav_plan -> {
+                // TODO
             }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            R.id.nav_logout -> {
+                // TODO
             }
         }
 

@@ -1,21 +1,33 @@
 package com.tuxdev.pzwwsi
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.content.ContextCompat.startForegroundService
 import android.util.Log
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.helper.HttpConnection
 import org.jsoup.select.Elements
+import java.io.Serializable
 
 class Networking {
     private var loginCookies = mutableMapOf<String,String>()
     private var url = "https://student.wwsi.edu.pl/plany"
 
     fun login(username : String, password : String) : Boolean {
-        val loginForm = Jsoup.connect(url)
-                .timeout(2000)
-                .method(Connection.Method.GET)
-                .userAgent(HttpConnection.DEFAULT_UA)
-                .execute()
-        this.loginCookies = loginForm.cookies()
+        try {
+            val loginForm = Jsoup.connect(url)
+                    .timeout(2000)
+                    .method(Connection.Method.GET)
+                    .userAgent(HttpConnection.DEFAULT_UA)
+                    .execute()
+            this.loginCookies = loginForm.cookies()
+        }
+        catch (e : Exception) {
+            e.printStackTrace()
+            return false
+        }
         //val loginCookies = mutableMapOf<String,String>()
 
         val loginResult = Jsoup.connect(url)
@@ -53,8 +65,12 @@ class Networking {
          return page.getElementsByClass("news_box")
     }
 
-    fun setService(service : MessagesCheckService){
-        service.setCookie(loginCookies)
-        service.startLooper()
+    fun setService(context: Context){
+        val service = Intent(context, MessagesCheckService::class.java)
+        service.putExtra("cookie",loginCookies as Serializable)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            context.startForegroundService(service)
+        else
+            context.startService(service)
     }
 }
