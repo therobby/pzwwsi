@@ -16,4 +16,9 @@
     <string name="login_failed">Logowanie nie powiodło się!</string>
     <string name="login_empty">Pole z nazwą urzytkownika i z hasłem nie moze być puste!</string>
     <string name="main_back_pressed">Naciśnij ponownie aby wyjść</string>
+    <string name="nav_info">Komunikaty</string>
+    <string name="nav_plan">Plan</string>
+    <string name="nav_logout">Wyloguj</string>
+    <string name="room">Sala</string>
+    <string name="infotitle">Komunikaty</string>
 </resources>

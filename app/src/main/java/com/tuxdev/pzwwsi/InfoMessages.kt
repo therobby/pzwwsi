@@ -16,8 +16,8 @@ class InfoMessages : Fragment() {
         super.onCreate(savedInstanceState)
 
         thread {
+            val inflater = requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             Main.studentWebsiteConnection.getKomunikaty().forEach {
-                val inflater = requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val view = inflater.inflate(R.layout.template_message_container, null)  // noot noot
 
                 runOnUiThread {

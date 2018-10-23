@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar
 import android.util.Log
 import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.defaultSharedPreferences
 import kotlin.concurrent.thread
 
 class LoginActivity : AppCompatActivity() {
@@ -14,6 +15,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        login_field.setText(defaultSharedPreferences.getString("username", ""))
 
         zaloguj.setOnClickListener {
             if (login_field.text.isBlank() || password_field.text.isBlank()){
@@ -36,7 +39,12 @@ class LoginActivity : AppCompatActivity() {
                         val user = Main.studentWebsiteConnection.getStudentName()
                         Log.e("Login",user)
 
-                        Main.studentWebsiteConnection.setService(this)
+                        defaultSharedPreferences
+                                .edit()
+                                .putString("username", login_field.text.toString())
+                                .apply()
+
+                        //Main.studentWebsiteConnection.setService(this)
 
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)

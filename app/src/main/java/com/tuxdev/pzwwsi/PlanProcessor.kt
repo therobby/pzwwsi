@@ -1,21 +1,22 @@
 package com.tuxdev.pzwwsi
 
+import com.tuxdev.pzwwsi.Day
+import com.tuxdev.pzwwsi.Lecture
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.util.CellUtil
-import java.io.File
-import java.io.FileInputStream
+import java.io.InputStream
 
 // copy of excel file analyzer written before
 class PlanProcessor {
     private val arr = ArrayList<ArrayList<String>>()
     private var ready = false
 
-    fun load(file: File) : Boolean {
+    fun load(file: InputStream) : Boolean {
         try {
-            val excelFile = FileInputStream(file)
-            val workbook = HSSFWorkbook(excelFile)
+            //val excelFile = FileInputStream(file)
+            val workbook = HSSFWorkbook(file)
             val sheet = unmerge(workbook.getSheetAt(0))
 
             sheet.forEach {
@@ -47,7 +48,7 @@ class PlanProcessor {
             arr.first().add(0, "Dzień")
 
             workbook.close()
-            excelFile.close()
+            //excelFile.close()
         }
         catch (e : Exception){
             return false
@@ -71,8 +72,8 @@ class PlanProcessor {
 
         val days = arrayListOf(Day("Poniedziałek"), Day("Wtorek"), Day("Środa"), Day("Piątek"))
 
-/*
-        arr.forEach {
+
+        /*arr.forEach {
             it.forEach {
                 print("${String.format("%15.15s", it)}|")
             }

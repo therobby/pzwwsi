@@ -12,13 +12,10 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlin.concurrent.thread
 import android.content.Intent
 import android.util.Log
-import org.jetbrains.anko.colorAttr
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var backPressed = false
     private val fragmentManager = supportFragmentManager
-    private val fragmentTransaction = fragmentManager.beginTransaction()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +30,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         nav_view.setCheckedItem(R.id.nav_info)
 
+        val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = InfoMessages()
         fragmentTransaction.add(R.id.main_act, fragment)
         fragmentTransaction.commit()
+        toolbar.title = resources.getString(R.string.nav_info)
     }
 
     override fun onBackPressed() {
@@ -66,20 +65,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_info -> {
                 try {
+                    val fragmentTransaction = fragmentManager.beginTransaction()
                     val fragment = InfoMessages()
-                    fragmentTransaction.add(R.id.main_act, fragment)
-                    fragmentTransaction.commit()
-                }catch (e : Exception){
-                    Log.e("Navigation_Change",e.message)
+                    fragmentTransaction.replace(R.id.main_act, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                    toolbar.title = resources.getString(R.string.nav_info)
+                } catch (e: Exception) {
+                    Log.e("Navigation_Change", e.message)
                 }
             }
             R.id.nav_plan -> {
-                // TODO
+                try {
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    val fragment = ScheduleFragment()
+                    fragmentTransaction.replace(R.id.main_act, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                    toolbar.title = resources.getString(R.string.nav_plan)
+                } catch (e: Exception) {
+                    Log.e("Navigation_Change", e.message)
+                }
             }
             R.id.nav_logout -> {
                 // TODO
             }
         }
+
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
