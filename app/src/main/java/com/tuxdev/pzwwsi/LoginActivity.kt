@@ -18,6 +18,11 @@ class LoginActivity : AppCompatActivity() {
 
         login_field.setText(defaultSharedPreferences.getString("username", ""))
 
+        if(login_field.text.isNotEmpty()){
+            password_field.requestFocus()
+        }
+
+
         zaloguj.setOnClickListener {
             if (login_field.text.isBlank() || password_field.text.isBlank()){
                 Snackbar.make(it,resources.getString(R.string.login_empty),Snackbar.LENGTH_SHORT)

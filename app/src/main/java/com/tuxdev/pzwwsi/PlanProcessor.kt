@@ -57,6 +57,8 @@ class PlanProcessor {
         return true
     }
 
+    fun isLoaded() : Boolean = !arr.isEmpty()
+
     fun hasGroup(group: String) : Boolean{
         for(i in 0 until arr.first().size) {
             if(arr.first()[i].contains(group,true)) {
