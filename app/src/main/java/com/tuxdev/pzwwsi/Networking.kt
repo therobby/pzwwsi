@@ -120,6 +120,13 @@ class Networking {
          return page.getElementsByClass("news_box")
     }
 
+    fun logout() {
+        val page = Jsoup.connect("https://student.wwsi.edu.pl/,logout")
+                .cookies(loginCookies)
+                .userAgent(HttpConnection.DEFAULT_UA)
+                .get()
+    }
+
     fun setService(context: Context){
         val service = Intent(context, MessagesCheckService::class.java)
         service.putExtra("cookie",loginCookies as Serializable)

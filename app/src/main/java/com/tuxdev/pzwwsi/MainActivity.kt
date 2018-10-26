@@ -88,7 +88,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_logout -> {
-                // TODO
+                thread{
+                    Main.studentWebsiteConnection.logout()
+                    runOnUiThread {
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
             }
         }
 
