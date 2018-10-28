@@ -13,7 +13,7 @@ class PlanProcessor {
     private val arr = ArrayList<ArrayList<String>>()
     private var ready = false
 
-    fun load(file: InputStream) : Boolean {
+    fun load(file: InputStream): Boolean {
         try {
             //val excelFile = FileInputStream(file)
             val workbook = HSSFWorkbook(file)
@@ -21,11 +21,11 @@ class PlanProcessor {
 
             sheet.forEach {
                 arr.add(arrayListOf())
-                it.forEach {
+                it.forEach { cell ->
                     arr.last().add(when {
-                        it.cellTypeEnum === CellType.BLANK -> ""
-                        it.cellTypeEnum === CellType.STRING -> it.stringCellValue
-                        else -> it.numericCellValue.toString()
+                        cell.cellTypeEnum === CellType.BLANK -> ""
+                        cell.cellTypeEnum === CellType.STRING -> cell.stringCellValue
+                        else -> cell.numericCellValue.toString()
                     })
                 }
             }
@@ -34,8 +34,8 @@ class PlanProcessor {
             val toDelete = ArrayList<ArrayList<String>>()
             arr.forEach {
                 var flag = false
-                it.forEach {
-                    if (it.isNotBlank())
+                it.forEach { str ->
+                    if (str.isNotBlank())
                         flag = true
                 }
                 if (!flag)
@@ -49,19 +49,18 @@ class PlanProcessor {
 
             workbook.close()
             //excelFile.close()
-        }
-        catch (e : Exception){
+        } catch (e: Exception) {
             return false
         }
         ready = true
         return true
     }
 
-    fun isLoaded() : Boolean = !arr.isEmpty()
+    fun isLoaded(): Boolean = !arr.isEmpty()
 
-    fun hasGroup(group: String) : Boolean{
-        for(i in 0 until arr.first().size) {
-            if(arr.first()[i].contains(group,true)) {
+    fun hasGroup(group: String): Boolean {
+        for (i in 0 until arr.first().size) {
+            if (arr.first()[i].contains(group, true)) {
                 return true
             }
         }
@@ -69,7 +68,7 @@ class PlanProcessor {
     }
 
     fun getDays(group: String): ArrayList<Day>? {
-        if(arr.isEmpty())
+        if (arr.isEmpty())
             return null
 
         val days = arrayListOf(Day("Poniedziałek"), Day("Wtorek"), Day("Środa"), Day("Piątek"))
@@ -83,58 +82,62 @@ class PlanProcessor {
         }*/
 
         var groupIndex = -1
-        for(i in 0 until arr.first().size) {
-            if(arr.first()[i].contains(group,true)) {
+        for (i in 0 until arr.first().size) {
+            if (arr.first()[i].contains(group, true)) {
                 groupIndex = i
                 break
             }
         }
 
         if (groupIndex >= 0) {
-            //var blok = 0
+            try {
+                //var blok = 0
 
-            var startRow = 1
-            var endRow = 16
+                var startRow = 1
+                var endRow = 16
 
-            for (d in 0 until days.size) {
-                var blok = 0
-                for (i in startRow until endRow) {
-                    if (arr[i][groupIndex].isNotBlank()) {
-                        //println("DATA: ${arr[i][firstIndex]} ${arr[i][firstIndex+1]}")
+                for (d in 0 until days.size) {
+                    var blok = 0
+                    for (i in startRow until endRow) {
+                        if (arr[i][groupIndex].isNotBlank()) {
+                            //println("DATA: ${arr[i][firstIndex]} ${arr[i][firstIndex+1]}")
 
-                        var rooms = arrayListOf(arr[i][groupIndex])
-                        var data = arrayListOf(arr[i][groupIndex + 1])
-                        var backindex = 1   // only used in while below
+                            var rooms = arrayListOf(arr[i][groupIndex])
+                            var data = arrayListOf(arr[i][groupIndex + 1])
+                            var backindex = 1   // only used in while below
 
-                        while (rooms.first() == data.first()) {
-                            rooms = arrayListOf(arr[i][groupIndex - backindex])
-                            backindex++
-                        }
-
-                        if (arr[i][groupIndex].contains("/")) {
-                            rooms = arr[i][groupIndex].split("/") as ArrayList
-                            data = arr[i][groupIndex + 1].split("/") as ArrayList
-
-                            for (j in 0 until rooms.size) {
-                                if (days[d].plan[blok] == null)
-                                    days[d].plan[blok] = arrayListOf(Lecture(data[j], rooms[j].toDouble().toInt()))
-                                else
-                                    days[d].plan[blok]?.add(Lecture(data[j], rooms[j].toDouble().toInt()))
+                            while (rooms.first() == data.first()) {
+                                rooms = arrayListOf(arr[i][groupIndex - backindex])
+                                backindex++
                             }
-                        } else {
-                            if (days[d].plan[blok] == null)
-                                days[d].plan[blok] = arrayListOf(Lecture(data.first(), rooms.first().toDouble().toInt()))
-                            else
-                                days[d].plan[blok]?.add(Lecture(data.first(), rooms.first().toDouble().toInt()))
+
+                            if (arr[i][groupIndex].contains("/")) {
+                                rooms = arr[i][groupIndex].split("/") as ArrayList
+                                data = arr[i][groupIndex + 1].split("/") as ArrayList
+
+                                for (j in 0 until rooms.size) {
+                                    if (days[d].plan[blok] == null)
+                                        days[d].plan[blok] = arrayListOf(Lecture(data[j], rooms[j].toDouble().toInt()))
+                                    else
+                                        days[d].plan[blok]?.add(Lecture(data[j], rooms[j].toDouble().toInt()))
+                                }
+                            } else {
+                                if (days[d].plan[blok] == null)
+                                    days[d].plan[blok] = arrayListOf(Lecture(data.first(), rooms.first().toDouble().toInt()))
+                                else
+                                    days[d].plan[blok]?.add(Lecture(data.first(), rooms.first().toDouble().toInt()))
+                            }
                         }
+                        blok++
                     }
-                    blok++
+                    startRow += 15
+                    endRow += 15
                 }
-                startRow += 15
-                endRow += 15
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
             }
-        }
-        else
+        } else
             return null
 
         return days

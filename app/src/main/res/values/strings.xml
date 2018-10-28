@@ -19,5 +19,28 @@
     <string name="nav_plan">Schedule</string>
     <string name="nav_logout">Logout</string>
     <string name="room">Room</string>
+    <string name="Monday">Monday</string>
+    <string name="Tuesday">Tuesday</string>
+    <string name="Wednesday">Wednesday</string>
+    <string name="Friday">Friday</string>
+    <string name="meeting">Meeting:</string>
+    <string name="rememberPassword">Remember Password</string>
 
+    <string-array name="meetings">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
 </resources>

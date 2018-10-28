@@ -12,10 +12,15 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlin.concurrent.thread
 import android.content.Intent
 import android.util.Log
+import android.widget.TextView
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var backPressed = false
     private val fragmentManager = supportFragmentManager
+
+    private var infofrag = false
+    private var schedulefrag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragmentTransaction.add(R.id.main_act, fragment)
         fragmentTransaction.commit()
         toolbar.title = resources.getString(R.string.nav_info)
+        infofrag = !infofrag
+
+        thread {
+            val name = Main.studentWebsiteConnection.getStudentName()
+            val group = Main.studentWebsiteConnection.getStudentGroup()
+            val meeting = "${resources.getString(R.string.meeting)} ${Main.studentWebsiteConnection.getCurrentMeet()}"
+
+            runOnUiThread {
+                nav_view.getHeaderView(0).findViewById<TextView>(R.id.student_name).text = name
+                nav_view.getHeaderView(0).findViewById<TextView>(R.id.student_group).text = group
+                nav_view.getHeaderView(0).findViewById<TextView>(R.id.student_meeting).text = meeting
+            }
+        }
+
     }
 
     override fun onBackPressed() {
@@ -64,27 +83,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_info -> {
-                try {
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    val fragment = InfoMessages()
-                    fragmentTransaction.replace(R.id.main_act, fragment)
-                            .addToBackStack(null)
-                            .commit()
-                    toolbar.title = resources.getString(R.string.nav_info)
-                } catch (e: Exception) {
-                    Log.e("Navigation_Change", e.message)
+                if(!infofrag) {
+                    try {
+                        val fragmentTransaction = fragmentManager.beginTransaction()
+                        val fragment = InfoMessages()
+                        fragmentTransaction.replace(R.id.main_act, fragment)
+                                .addToBackStack(null)
+                                .commit()
+                        toolbar.title = resources.getString(R.string.nav_info)
+                        schedulefrag = !schedulefrag
+                    } catch (e: Exception) {
+                        Log.e("Navigation_Change", e.message)
+                    }
                 }
             }
             R.id.nav_plan -> {
-                try {
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    val fragment = ScheduleFragment()
-                    fragmentTransaction.replace(R.id.main_act, fragment)
-                            .addToBackStack(null)
-                            .commit()
-                    toolbar.title = resources.getString(R.string.nav_plan)
-                } catch (e: Exception) {
-                    Log.e("Navigation_Change", e.message)
+                if(!schedulefrag) {
+                    try {
+                        val fragmentTransaction = fragmentManager.beginTransaction()
+                        val fragment = ScheduleFragment()
+                        fragmentTransaction.replace(R.id.main_act, fragment)
+                                .addToBackStack(null)
+                                .commit()
+                        toolbar.title = resources.getString(R.string.nav_plan)
+                        infofrag = !infofrag
+                    } catch (e: Exception) {
+                        Log.e("Navigation_Change", e.message)
+                    }
                 }
             }
             R.id.nav_logout -> {

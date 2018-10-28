@@ -52,9 +52,9 @@
     <LinearLayout
         android:id="@+id/login_ll3"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="180dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -66,18 +66,17 @@
         <EditText
             android:id="@+id/login_field"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/login_edit_text"
             android:ems="10"
             android:hint="@string/login"
-            android:importantForAutofill="no"
             android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/password_field"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/login_edit_text"
             android:ems="10"
@@ -93,11 +92,18 @@
             android:id="@+id/zaloguj"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/login_button"
             android:text="@string/sign_in"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="455dp" />
+
+        <CheckBox
+            android:id="@+id/login_remember_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/rememberPassword" />
 
     </LinearLayout>
 

@@ -20,5 +20,10 @@
     <string name="nav_plan">Plan</string>
     <string name="nav_logout">Wyloguj</string>
     <string name="room">Sala</string>
-    <string name="infotitle">Komunikaty</string>
+    <string name="Monday">Poniedziałek</string>
+    <string name="Tuesday">Wtorek</string>
+    <string name="Wednesday">Środa</string>
+    <string name="Friday">Piątek</string>
+    <string name="meeting">Zjazd:</string>
+    <string name="rememberPassword">Zapamiętaj Hasło</string>
 </resources>
