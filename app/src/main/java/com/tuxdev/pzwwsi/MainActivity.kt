@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlin.concurrent.thread
 import android.content.Intent
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.TextView
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragment = InfoMessages()
         fragmentTransaction.add(R.id.main_act, fragment)
         fragmentTransaction.commit()
-        toolbar.title = resources.getString(R.string.nav_info)
+        //toolbar.title = resources.getString(R.string.nav_info)
         infofrag = !infofrag
 
         thread {
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_info -> {
-                if(!infofrag) {
+                //if(!infofrag) {
                     try {
                         val fragmentTransaction = fragmentManager.beginTransaction()
                         val fragment = InfoMessages()
@@ -95,10 +96,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     } catch (e: Exception) {
                         Log.e("Navigation_Change", e.message)
                     }
-                }
+                //}
             }
             R.id.nav_plan -> {
-                if(!schedulefrag) {
+                //if(!schedulefrag) {
                     try {
                         val fragmentTransaction = fragmentManager.beginTransaction()
                         val fragment = ScheduleFragment()
@@ -110,7 +111,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     } catch (e: Exception) {
                         Log.e("Navigation_Change", e.message)
                     }
-                }
+                //}
             }
             R.id.nav_logout -> {
                 thread{
@@ -127,4 +128,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
+
+
 }

@@ -56,6 +56,27 @@ class ScheduleFragment : Fragment() {
         return layout
     }
 
+    private fun currentDay(): Int {
+        val calendar = Calendar.getInstance()
+        calendar.firstDayOfWeek = Calendar.MONDAY
+        calendar.time = Date()
+        val currdaynr = calendar.get(Calendar.DAY_OF_WEEK)
+
+        Log.e("S", currdaynr.toString())
+
+        return when (currdaynr) {
+            1 -> 0
+            2 -> 0
+            3 -> 1
+            4 -> 2
+            5 -> 3
+            6 -> 0
+            7 -> 0
+            else -> 4
+        }
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -104,7 +125,7 @@ class ScheduleFragment : Fragment() {
             if (day <= 0) {
                 if (meeting > 1) {
                     meeting--
-                    day = 4
+                    day = 3
                 }
             } else
                 day--
@@ -197,36 +218,54 @@ class ScheduleFragment : Fragment() {
             val calendar = Calendar.getInstance()
             val currentTime = SimpleDateFormat("HH:mm")
                     .parse(SimpleDateFormat("HH:mm").format(calendar.time))
-            time.forEach { time ->
+
+            var i = 0
+
+            time.forEach { timeString ->
                 val cal1 = Calendar.getInstance()
                 val cal2 = Calendar.getInstance()
-                cal1.time = SimpleDateFormat("HH:mm").parse(time.takeWhile { char ->
+                cal1.time = SimpleDateFormat("HH:mm").parse(timeString.takeWhile { char ->
                     char != '-'
                 }.trim())
-                cal2.time = SimpleDateFormat("HH:mm").parse(time.takeLastWhile { char ->
+                cal2.time = SimpleDateFormat("HH:mm").parse(timeString.takeLastWhile { char ->
                     char != '-'
                 }.trim())
                 //Log.e("Schedule", "${cal1.time} $currentTime ${cal2.time}")
+
                 when {
-                    (toDisplay[time.indexOf(time)] as LinearLayout).childCount <= 1 -> {
-                        toDisplay[time.indexOf(time)].backgroundColor =
+                    (toDisplay[time.indexOf(timeString)] as LinearLayout).childCount <= 2 -> {
+                        toDisplay[time.indexOf(timeString)].backgroundColor =
                                 resources.getColor(R.color.backgroundGrayLight, requireContext().theme)
                     }
-                    currentTime.before(cal1.time) ||
-                            Main.studentWebsiteConnection.getCurrentMeet() < meeting -> {
-                        toDisplay[time.indexOf(time)].backgroundColor =
-                                resources.getColor(R.color.backgroundRedLight, requireContext().theme)
-                    }
-                    currentTime.after(cal1.time) && currentTime.before(cal2.time) ||
-                            cal1.time == currentTime || currentTime == cal2.time -> {
-                        toDisplay[time.indexOf(time)].backgroundColor =
-                                resources.getColor(R.color.backgroundYellowLight, requireContext().theme)
-                    }
-                    currentTime.after(cal2.time) -> {
-                        toDisplay[time.indexOf(time)].backgroundColor =
+                    Main.studentWebsiteConnection.getCurrentMeet() > meeting ||
+                            (day < currentDay() && Main.studentWebsiteConnection.getCurrentMeet() == meeting) ||
+                            (day == currentDay() && currentTime.after(cal2.time) && Main.studentWebsiteConnection.getCurrentMeet() == meeting) -> {
+                        toDisplay[time.indexOf(timeString)].backgroundColor =
                                 resources.getColor(R.color.backgroundGreenLight, requireContext().theme)
                     }
+                    currentTime.before(cal1.time) && Main.studentWebsiteConnection.getCurrentMeet() == meeting ||
+                            Main.studentWebsiteConnection.getCurrentMeet() < meeting ||
+                            day > currentDay() -> {
+                        toDisplay[time.indexOf(timeString)].backgroundColor =
+                                resources.getColor(R.color.backgroundRedLight, requireContext().theme)
+                    }
+                    (currentTime.after(cal1.time) && currentTime.before(cal2.time) ||
+                            cal1.time == currentTime ||
+                            currentTime == cal2.time) && Main.studentWebsiteConnection.getCurrentMeet() == meeting-> {
+                        toDisplay[time.indexOf(timeString)].backgroundColor =
+                                resources.getColor(R.color.backgroundYellowLight, requireContext().theme)
+                    }
+                    else -> {
+                        Log.e("Schedule", (toDisplay[time.indexOf(timeString)] as LinearLayout).childCount.toString())
+                        Log.e("Schedule", (currentTime.before(cal1.time) ||
+                                Main.studentWebsiteConnection.getCurrentMeet() < meeting).toString())
+                        Log.e("Schedule", (currentTime.after(cal1.time) && currentTime.before(cal2.time) ||
+                                cal1.time == currentTime || currentTime == cal2.time).toString())
+                        Log.e("Schedule", currentTime.after(cal2.time).toString())
+                    }
                 }
+
+                Log.e("Schedule", (i++).toString())
             }
 
             schedule_scroll.removeAllViews()
@@ -242,7 +281,7 @@ class ScheduleFragment : Fragment() {
         thread {
             while (this.isVisible) {
                 displaySchedule()
-                for (i in 0 until 10)   // 1sec refresh rate
+                for (i in 0 until 100)   // 10 sec refresh rate
                     if (forceRefresh) {
                         forceRefresh = false
                         break
